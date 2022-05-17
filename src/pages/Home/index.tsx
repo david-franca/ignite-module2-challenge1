@@ -1,5 +1,4 @@
-import { AxiosResponse } from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MdAddShoppingCart } from "react-icons/md";
 
 import { useCart } from "../../hooks/useCart";
@@ -34,12 +33,11 @@ const Home = (): JSX.Element => {
 
   useEffect(() => {
     async function loadProducts() {
-      api.get("products").then(({ data }: AxiosResponse<Product[]>) => {
-        const productsFormatted = data.map((product) => {
-          return { ...product, priceFormatted: formatPrice(product.price) };
-        });
-        setProducts(productsFormatted);
+      const { data } = await api.get<Product[]>("products");
+      const productsFormatted = data.map((product) => {
+        return { ...product, priceFormatted: formatPrice(product.price) };
       });
+      setProducts(productsFormatted);
     }
 
     loadProducts();
